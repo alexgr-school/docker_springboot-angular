@@ -29,6 +29,7 @@ docker compose up -d --build
 ## Run Spring Boot application
 
 ```shell
+cd ./spring-boot-server
 mvn spring-boot:run
 # or using docker
 docker compose up spring-boot -d --build
@@ -39,6 +40,8 @@ The Spring Boot Server will export API at port `8080`.
 ## Run Angular Client
 
 ```shell
+cd ./angular-15-client
+RUN npm install -g @angular/cli # if you don't have Angular CLI
 npm install
 ng serve --port 3000
 # or using docker
