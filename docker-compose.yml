@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+    spring-boot:
+        build:
+            context: ./spring-boot-server
+            dockerfile: Dockerfile
+        ports:
+            - '8080:8080'
+        volumes:
+            - ./spring-boot-server:/app
+
+    angular:
+        build:
+            context: ./angular-15-client
+            dockerfile: Dockerfile
+        ports:
+            - '3000:3000'
+        volumes:
+            - ./angular-15-client:/app
+            - /app/node_modules
+            - /app/.angular
