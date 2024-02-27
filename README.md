@@ -83,5 +83,6 @@ Variables used in following services:
     -   **DATBASE_NAME**, **DATABASE_USERNAME**, **DATABASE_PASSWORD** (MariaDB connection) used in `docker-compose.yml` to generate a custom connection string using service name `mariadb` as host
 -   `angular` (Angular)
     -   **BACK_URL** (Api URL)
+    If you want to add more environment variables, you need to update the `./angular/propagate-env.sh` script to propagate them to the Angular environment file `./angular/src/environments/environment.ts`
 -   `mariadb` (MariaDB)
     -   **DATABASE_NAME**, **DATABASE_ROOT_PASSWORD**, **DATABASE_USERNAME**, **DATABASE_PASSWORD** (MariaDB configuration)
