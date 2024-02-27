@@ -12,7 +12,7 @@ RUN npm install
 # Copier le reste des fichiers du projet
 COPY . /app
 
-EXPOSE 3000
-
-# Lancer l'application Angular
-CMD ng serve --port 3000 --host 0.0.0.0
+# Propager les variables d'environnement nécessaires et lancer l'application Angular
+CMD chmod +x propagate-env.sh && \
+    ./propagate-env.sh && \
+    ng serve --port 3000 --host 0.0.0.0
