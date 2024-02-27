@@ -20,32 +20,68 @@ More Practice:
 
 > [Angular + Spring Boot: JWT Authentication and Authorization example](https://www.bezkoder.com/angular-15-spring-boot-jwt-auth/)
 
-## Run Spring Boot and Angular using Docker
+## Commands
+
+### Esential
+
+Build
+
+```shell
+docker compose build
+```
+
+Run all services
+
+```shell
+docker compose up
+```
+
+**OR**
+
+Build and run all services in the background
 
 ```shell
 docker compose up -d --build
 ```
 
-## Run Spring Boot application
+---
+
+Stop all services
 
 ```shell
-cd ./spring-boot-server
-mvn spring-boot:run
-# or using docker
-docker compose up spring-boot -d --build
+docker compose down
 ```
 
-The Spring Boot Server will export API at port `8080`.
-
-## Run Angular Client
+Stop all services and remove volumes, networks, and images created by `up`
 
 ```shell
-cd ./angular-15-client
-RUN npm install -g @angular/cli # if you don't have Angular CLI
-npm install
-ng serve --port 3000
-# or using docker
-docker compose up angular -d --build
+docker compose down -v --remove-orphans --rmi all
 ```
 
-The Angular Client will be running on port `3000`.
+### Utils
+
+Show logs
+
+```shell
+docker compose logs -f
+```
+
+Show logs for a specific service
+
+```shell
+docker compose logs -f spring-boot
+```
+
+## Environment
+
+All services are using the same global environment file `.env`
+
+Variables used in following services:
+
+-   `spring-boot` (Spring Boot)
+    -   **FRONT_URL** (Cors configuration)
+    -   **DATBASE_NAME**, **DATABASE_USERNAME**, **DATABASE_PASSWORD** (MariaDB connection) used in `docker-compose.yml` to generate a custom connection string using service name `mariadb` as host
+-   `angular` (Angular)
+    -   **BACK_URL** (Api URL)
+-   `mariadb` (MariaDB)
+    -   **DATABASE_NAME**, **DATABASE_ROOT_PASSWORD**, **DATABASE_USERNAME**, **DATABASE_PASSWORD** (MariaDB configuration)
