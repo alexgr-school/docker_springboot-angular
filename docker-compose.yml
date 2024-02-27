@@ -2,21 +2,66 @@ version: '3.9'
 
 services:
     spring-boot:
+        container_name: ${CONTAINER_PREFIX}_spring-boot
         build:
             context: ./spring-boot-server
             dockerfile: Dockerfile
+        env_file:
+            - .env
+        environment:
+            DATABASE_URL: jdbc:mariadb://mariadb:3306/${DATABASE_NAME}?user=${DATABASE_USER}&password=${DATABASE_PASSWORD}
         ports:
-            - '8080:8080'
+            - '${BACK_PORT}:8080'
+        networks:
+            - backend
+            - frontend
         volumes:
-            - ./spring-boot-server:/app
+            - ./spring-boot-server:/app:rw
+        depends_on:
+            - mariadb
 
     angular:
+        container_name: ${CONTAINER_PREFIX}_angular
         build:
             context: ./angular-15-client
             dockerfile: Dockerfile
+        env_file:
+            - .env
         ports:
-            - '3000:3000'
+            - '${FRONT_PORT}:3000'
+        networks:
+            - frontend
         volumes:
-            - ./angular-15-client:/app
+            - ./angular-15-client:/app:rw
             - /app/node_modules
             - /app/.angular
+            - /app/src/environments
+        depends_on:
+            - spring-boot
+
+    mariadb:
+        container_name: ${CONTAINER_PREFIX}_mariadb
+        image: mariadb
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DATABASE_NAME}
+            MYSQL_USER: ${DATABASE_USER}
+            MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+        ports:
+            - '${DATABASE_PORT}:3306'
+        networks:
+            - backend
+        volumes:
+            - mariadb:/var/lib/mysql
+
+volumes:
+    mariadb:
+        name: ${VOLUME_PREFIX}_mariadb
+
+networks:
+    frontend:
+        name: ${NETWORK_PREFIX}_frontend
+        driver: bridge
+    backend:
+        name: ${NETWORK_PREFIX}_backend
+        driver: bridge
